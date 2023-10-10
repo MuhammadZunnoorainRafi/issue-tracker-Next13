@@ -1,11 +1,7 @@
-import { IssueStatusBadge } from '@/components';
 import { prismaDB } from '@/utils/prismaDB';
-import { Box, Button, Card, Flex, Grid, Heading, Text } from '@radix-ui/themes';
-import ReactMarkdown from 'react-markdown';
-import { Pencil2Icon } from '@radix-ui/react-icons';
-import Link from 'next/link';
-import EditIssueButton from './EditIssueButton';
+import { Box, Grid } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
+import EditIssueButton from './EditIssueButton';
 import SingleIssueDetails from './SingleIssueDetails';
 
 type Props = {
