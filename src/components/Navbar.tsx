@@ -18,13 +18,15 @@ const NavLink = [
 function Navbar() {
   const pathName = usePathname();
   return (
-    <div className="flex items-center border-b px-5 h-14 space-x-3">
-      <AiFillBug />
+    <div className="flex items-center mb-5 border-b px-5 h-16 space-x-3">
+      <Link href="/">
+        <AiFillBug size={20} />
+      </Link>
       {NavLink.map((val) => {
         return (
           <Link
             className={classNames({
-              'text-zinc-900': pathName === val.href,
+              'text-zinc-900 font-medium': pathName === val.href,
               'text-zinc-500': pathName !== val.href,
               'hover:text-zinc-800 transition-colors': true,
             })}
