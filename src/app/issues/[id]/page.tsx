@@ -1,7 +1,12 @@
 import { IssueStatusBadge } from '@/components';
 import { prismaDB } from '@/utils/prismaDB';
-import { Card, Flex, Heading, Text } from '@radix-ui/themes';
+import { Box, Button, Card, Flex, Grid, Heading, Text } from '@radix-ui/themes';
 import ReactMarkdown from 'react-markdown';
+import { Pencil2Icon } from '@radix-ui/react-icons';
+import Link from 'next/link';
+import EditIssueButton from './EditIssueButton';
+import { notFound } from 'next/navigation';
+import SingleIssueDetails from './SingleIssueDetails';
 
 type Props = {
   params: { id: string };
@@ -13,17 +18,18 @@ async function IssueDetails({ params }: Props) {
       id: parseInt(params.id),
     },
   });
+
+  if (!singleIssue) notFound();
+
   return (
-    <Flex direction="column">
-      <Heading>{singleIssue?.title}</Heading>
-      <Flex gap="2" my="2">
-        <IssueStatusBadge status={singleIssue!.status} />
-        <Text>{singleIssue?.createdAt.toDateString()}</Text>
-      </Flex>
-      <Card className=" prose max-w-full" mt="4">
-        <ReactMarkdown>{singleIssue?.description}</ReactMarkdown>
-      </Card>
-    </Flex>
+    <Grid columns={{ initial: '1', md: '2' }} gap="5">
+      <Box>
+        <SingleIssueDetails issue={singleIssue} />
+      </Box>
+      <Box>
+        <EditIssueButton singleIssueId={singleIssue.id} />
+      </Box>
+    </Grid>
   );
 }
 

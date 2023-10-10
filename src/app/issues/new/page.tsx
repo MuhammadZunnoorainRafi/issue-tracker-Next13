@@ -1,15 +1,18 @@
 'use client';
-import { ErrorMessage } from '@/components';
+import { ErrorMessage, Spinner } from '@/components';
 import { issueSchema } from '@/zodSchemas/issueSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Callout, TextField } from '@radix-ui/themes';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
+  ssr: false,
+});
 
 type IssueSchema = z.infer<typeof issueSchema>;
 function CreateIssue() {
@@ -65,7 +68,9 @@ function CreateIssue() {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button disabled={loading}>Submit New Issue</Button>
+        <Button disabled={loading}>
+          Submit New Issue {loading && <Spinner />}
+        </Button>
       </form>
     </div>
   );

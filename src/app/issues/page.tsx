@@ -1,4 +1,4 @@
-import { IssueStatusBadge, RadixLink } from '@/components';
+import { IssueStatusBadge, IssuesAction, RadixLink } from '@/components';
 import { prismaDB } from '@/utils/prismaDB';
 import { Button, Table } from '@radix-ui/themes';
 import Link from 'next/link';
@@ -9,9 +9,7 @@ async function Issues() {
 
   return (
     <div className="space-y-3">
-      <Link className=" cursor-pointer" href="/issues/new">
-        <Button color="violet">New Issue</Button>
-      </Link>
+      <IssuesAction />
       <div>
         <Table.Root variant="surface">
           <Table.Header>
