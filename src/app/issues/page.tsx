@@ -1,14 +1,12 @@
 import { IssueStatusBadge, IssuesAction, RadixLink } from '@/components';
 import { prismaDB } from '@/utils/prismaDB';
-import { Button, Table } from '@radix-ui/themes';
-import Link from 'next/link';
-import React from 'react';
+import { Table } from '@radix-ui/themes';
 
 async function Issues() {
   const issues = await prismaDB.issue.findMany();
 
   return (
-    <div className="space-y-3">
+    <div>
       <IssuesAction />
       <div>
         <Table.Root variant="surface">
@@ -46,5 +44,6 @@ async function Issues() {
     </div>
   );
 }
+export const dynamic = 'force-dynamic';
 
 export default Issues;

@@ -4,8 +4,8 @@ import React from 'react';
 
 function IssuesAction() {
   return (
-    <div>
-      <Link className=" cursor-pointer" href="/issues/new">
+    <div className="mb-4 inline-block">
+      <Link href="/issues/new">
         <Button color="violet">New Issue</Button>
       </Link>
     </div>

@@ -2,7 +2,14 @@
 import { ErrorMessage, Spinner } from '@/components';
 import { issueSchema } from '@/zodSchemas/issueSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Callout, TextField } from '@radix-ui/themes';
+import {
+  Box,
+  Button,
+  Callout,
+  Flex,
+  Select,
+  TextField,
+} from '@radix-ui/themes';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import 'easymde/dist/easymde.min.css';
@@ -28,9 +35,20 @@ function IssueForm({ issue }: { issue?: Issue }) {
   });
 
   const formSubmit = async (data: IssueFormData) => {
+    console.log('status = ', data.status);
     try {
       setLoading(true);
-      await axios.post('/api/issues', data);
+      if (issue)
+        await axios.put(`/api/issues/${issue.id}`, {
+          title: data.title,
+          description: data.description,
+          status: data.status,
+        });
+      else
+        await axios.post('/api/issues', {
+          title: data.title,
+          description: data.description,
+        });
       router.push('/issues');
       router.refresh();
     } catch (error) {
@@ -48,19 +66,43 @@ function IssueForm({ issue }: { issue?: Issue }) {
       )}
 
       <form onSubmit={handleSubmit(formSubmit)} className="space-y-3">
-        <TextField.Root>
-          <TextField.Input
-            defaultValue={issue?.title}
-            {...register('title')}
-            placeholder="Title"
-          />
-        </TextField.Root>
+        <Flex gap="2" align="center">
+          <TextField.Root className="flex-1">
+            <TextField.Input
+              defaultValue={issue?.title}
+              {...register('title')}
+              placeholder="Title"
+            />
+          </TextField.Root>
+          <>
+            {issue && (
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <Select.Root
+                    onValueChange={field.onChange}
+                    {...field}
+                    defaultValue={issue.status}
+                  >
+                    <Select.Trigger />
+                    <Select.Content position="popper">
+                      <Select.Item value="OPEN">Open</Select.Item>
+                      <Select.Item value="IN_PROGRESS">In Progress</Select.Item>
+                      <Select.Item value="CLOSED">Closed</Select.Item>
+                    </Select.Content>
+                  </Select.Root>
+                )}
+              />
+            )}
+          </>
+        </Flex>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
 
         <Controller
           name="description"
           control={control}
-          defaultValue={issue?.description}
+          defaultValue={issue ? issue.description : ''}
           render={({ field }) => (
             <SimpleMDE
               defaultValue={issue?.description}
@@ -72,7 +114,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
         <Button disabled={loading}>
-          Submit New Issue {loading && <Spinner />}
+          {issue ? 'Update Issue' : 'Submit New Issue'} {loading && <Spinner />}
         </Button>
       </form>
     </div>
