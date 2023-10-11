@@ -34,3 +34,24 @@ export async function PUT(
 
   return NextResponse.json(updatedIssue, { status: 201 });
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  // const session = await getServerSession(authOptions);
+  // if (!session) return NextResponse.json({}, { status: 401 });
+
+  const issue = await prismaDB.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!issue)
+    return NextResponse.json({ error: 'Invalid issue' }, { status: 404 });
+
+  await prismaDB.issue.delete({
+    where: { id: issue.id },
+  });
+
+  return NextResponse.json({});
+}

@@ -1,8 +1,9 @@
 import { prismaDB } from '@/utils/prismaDB';
-import { Box, Grid } from '@radix-ui/themes';
+import { Box, Flex, Grid } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
 import EditIssueButton from './EditIssueButton';
 import SingleIssueDetails from './SingleIssueDetails';
+import DeleteIssueButton from './DeleteIssueButton';
 
 type Props = {
   params: { id: string };
@@ -18,12 +19,15 @@ async function IssueDetails({ params }: Props) {
   if (!singleIssue) notFound();
 
   return (
-    <Grid columns={{ initial: '1', md: '2' }} gap="5">
-      <Box>
+    <Grid columns={{ initial: '1', sm: '5' }} gap="5">
+      <Box className="md:col-span-4">
         <SingleIssueDetails issue={singleIssue} />
       </Box>
       <Box>
-        <EditIssueButton singleIssueId={singleIssue.id} />
+        <Flex direction="column" gap="2">
+          <EditIssueButton singleIssueId={singleIssue.id} />
+          <DeleteIssueButton singleIssueId={singleIssue.id} />
+        </Flex>
       </Box>
     </Grid>
   );
