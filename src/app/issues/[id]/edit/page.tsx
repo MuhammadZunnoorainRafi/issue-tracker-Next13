@@ -2,7 +2,7 @@ import React from 'react';
 import { prismaDB } from '@/utils/prismaDB';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import IssueFormSkeleton from '../../_component/IssueFormSkeleton';
+import IssueFormSkeleton from './loading';
 
 const IssueForm = dynamic(() => import('@/app/issues/_component/IssueForm'), {
   ssr: false,
