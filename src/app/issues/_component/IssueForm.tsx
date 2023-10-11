@@ -49,7 +49,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
           title: data.title,
           description: data.description,
         });
-      router.push('/issues');
+      router.push('/issues/list');
       router.refresh();
     } catch (error) {
       setError('An unexpected error occurred.');

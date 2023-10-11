@@ -7,7 +7,7 @@ function EditIssueButton({ singleIssueId }: { singleIssueId: number }) {
   return (
     <Button>
       <Pencil2Icon />
-      <Link href={`/issues/${singleIssueId}/edit`}>Edit Issue</Link>
+      <Link href={`/issues/edit/${singleIssueId}`}>Edit Issue</Link>
     </Button>
   );
 }
