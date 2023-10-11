@@ -12,17 +12,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AiFillBug } from 'react-icons/ai';
-
-const NavLink = [
-  {
-    href: '/',
-    label: 'Dashboard',
-  },
-  {
-    href: '/issues/list',
-    label: 'Issues',
-  },
-];
+import { Skeleton } from '@/components';
 
 function Navbar() {
   return (
@@ -43,17 +33,29 @@ function Navbar() {
 }
 
 const NavLinks = () => {
+  const NavLinkArr = [
+    {
+      href: '/',
+      label: 'Dashboard',
+    },
+    {
+      href: '/issues/list',
+      label: 'Issues',
+    },
+  ];
+
   const pathName = usePathname();
 
   return (
     <>
-      {NavLink.map((val) => {
+      {NavLinkArr.map((val) => {
         return (
           <Link
             className={classNames({
-              'text-zinc-900 font-medium': pathName === val.href,
-              'text-zinc-500': pathName !== val.href,
-              'hover:text-zinc-800 transition-colors': true,
+              'nav-link': true,
+              '!text-zinc-900 font-medium':
+                (pathName.includes(val.href) && val.href.length > 1) ||
+                pathName === val.href,
             })}
             key={val.href}
             href={val.href}
@@ -69,7 +71,7 @@ const NavLinks = () => {
 const AuthStatus = () => {
   const { status, data: session } = useSession();
 
-  if (status === 'loading') return null;
+  if (status === 'loading') return <Skeleton width="3rem" />;
   if (status === 'unauthenticated')
     return <Link href="/api/auth/signin">Login</Link>;
 

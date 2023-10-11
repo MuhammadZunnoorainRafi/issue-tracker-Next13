@@ -22,7 +22,7 @@ async function Issues() {
               return (
                 <Table.Row key={val.id}>
                   <Table.Cell>
-                    <RadixLink href={`/issues/${val.id}`}>
+                    <RadixLink href={`/issues/list/${val.id}`}>
                       {val.title}
                     </RadixLink>
                     <div className="block md:hidden">
