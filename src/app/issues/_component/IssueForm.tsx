@@ -1,15 +1,8 @@
 'use client';
 import { ErrorMessage, Spinner } from '@/components';
-import { issueSchema } from '@/zodSchemas/issueSchema';
+import { patchIssueSchema } from '@/zodSchemas/issueSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Box,
-  Button,
-  Callout,
-  Flex,
-  Select,
-  TextField,
-} from '@radix-ui/themes';
+import { Button, Callout, Flex, Select, TextField } from '@radix-ui/themes';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import 'easymde/dist/easymde.min.css';
@@ -19,7 +12,8 @@ import { useRouter } from 'next/navigation';
 import { Issue } from '@prisma/client';
 import SimpleMDE from 'react-simplemde-editor';
 
-type IssueFormData = z.infer<typeof issueSchema>;
+type IssueFormData = z.infer<typeof patchIssueSchema>;
+
 function IssueForm({ issue }: { issue?: Issue }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -31,24 +25,15 @@ function IssueForm({ issue }: { issue?: Issue }) {
     control,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(issueSchema),
+    resolver: zodResolver(patchIssueSchema),
   });
 
   const formSubmit = async (data: IssueFormData) => {
     console.log('status = ', data.status);
     try {
       setLoading(true);
-      if (issue)
-        await axios.put(`/api/issues/${issue.id}`, {
-          title: data.title,
-          description: data.description,
-          status: data.status,
-        });
-      else
-        await axios.post('/api/issues', {
-          title: data.title,
-          description: data.description,
-        });
+      if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
+      else await axios.post('/api/issues', data);
       router.push('/issues/list');
       router.refresh();
     } catch (error) {
