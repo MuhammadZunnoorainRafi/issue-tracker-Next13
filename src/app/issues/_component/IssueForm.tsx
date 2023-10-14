@@ -29,7 +29,6 @@ function IssueForm({ issue }: { issue?: Issue }) {
   });
 
   const formSubmit = async (data: IssueFormData) => {
-    console.log('status = ', data.status);
     try {
       setLoading(true);
       if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
@@ -71,7 +70,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
                     defaultValue={issue.status}
                   >
                     <Select.Trigger />
-                    <Select.Content position="popper">
+                    <Select.Content>
                       <Select.Item value="OPEN">Open</Select.Item>
                       <Select.Item value="IN_PROGRESS">In Progress</Select.Item>
                       <Select.Item value="CLOSED">Closed</Select.Item>
