@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Link as RLink } from '@radix-ui/themes';
-import { PropsWithChildren } from 'react';
 
 type Props = {
   href: string;
