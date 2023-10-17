@@ -25,6 +25,9 @@ function Pagination({ itemCount, pageSize, currentPage }: Props) {
   };
 
   const pageCount = Math.ceil(itemCount / pageSize);
+
+  if (pageCount <= 1) return null;
+
   return (
     <Flex align="center" gap="2">
       <Text>

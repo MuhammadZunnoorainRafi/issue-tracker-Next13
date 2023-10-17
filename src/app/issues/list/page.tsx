@@ -1,8 +1,9 @@
 import { IssueStatusBadge, IssuesAction, RadixLink } from '@/components';
+import Pagination from '@/components/Pagination';
 import { prismaDB } from '@/utils/prismaDB';
 import { Issue, Status } from '@prisma/client';
 import { ArrowUpIcon } from '@radix-ui/react-icons';
-import { Table } from '@radix-ui/themes';
+import { Flex, Table } from '@radix-ui/themes';
 import Link from 'next/link';
 
 const columns: { label: string; value: keyof Issue; className?: string }[] = [
@@ -25,7 +26,7 @@ const columns: { label: string; value: keyof Issue; className?: string }[] = [
 async function Issues({
   searchParams,
 }: {
-  searchParams: { status: Status; orderBy: keyof Issue };
+  searchParams: { status: Status; orderBy: keyof Issue; page: string };
 }) {
   const statuses = Object.values(Status);
   const status = statuses.includes(searchParams.status)
@@ -38,15 +39,22 @@ async function Issues({
     ? { [searchParams.orderBy]: 'asc' }
     : undefined;
 
+  const pageNum = parseInt(searchParams.page) || 1;
+  const pageSize = 10;
+
   const issues = await prismaDB.issue.findMany({
     where: {
       status,
     },
     orderBy,
+    skip: (pageNum - 1) * pageSize,
+    take: pageSize,
   });
 
+  const issueCount = await prismaDB.issue.count({ where: { status } });
+
   return (
-    <div>
+    <Flex direction="column" gap="4">
       <IssuesAction />
       <div>
         <Table.Root variant="surface">
@@ -95,7 +103,12 @@ async function Issues({
           </Table.Body>
         </Table.Root>
       </div>
-    </div>
+      <Pagination
+        itemCount={issueCount}
+        pageSize={pageSize}
+        currentPage={pageNum}
+      />
+    </Flex>
   );
 }
 export const dynamic = 'force-dynamic';
