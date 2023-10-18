@@ -31,7 +31,7 @@ export default function RootLayout({
           <AuthProvider>
             <Theme scaling="105%" accentColor="violet">
               <Navbar />
-              <main className="pb-5">
+              <main className="py-5">
                 <Container>{children}</Container>
               </main>
             </Theme>
